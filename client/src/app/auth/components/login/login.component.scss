@@ -35,13 +35,19 @@
       .forgot-password {
         margin-bottom: 8px;
         text-align: center;
-        font-size: 0.85rem;
+        font-size: 1rem;
+
         > a {
           color: #121212;
+          text-decoration: none;
         }
       }
     }
   }
+}
+
+.newacc {
+  text-decoration: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -66,4 +72,23 @@
     padding: 10px 12px;
     width: 100%;
   }
+}
+
+.input-wrapper {
+  position: relative; /* This allows the icon to be positioned within the wrapper */
+}
+
+.input-wrapper input {
+  width: 100%; /* Ensure the input field takes full width */
+  padding-right: 32px; /* Add space for the icon */
+}
+
+.input-wrapper .toggle-icon {
+  position: absolute; /* Position the icon inside the wrapper */
+  right: 8px; /* Align the icon to the right edge */
+  top: 50%; /* Center the icon vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  background: none;
+  border: none;
+  cursor: pointer;
 }

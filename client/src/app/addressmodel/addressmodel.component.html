@@ -1,0 +1,214 @@
+<!-- <div class="modal-header">
+  <h4 class="modal-title fs-2 fw-medium">{{ modetitle }}</h4>
+</div> -->
+<div class="modal-body">
+  <form
+    [formGroup]="addressForm"
+    (ngSubmit)="Add()"
+    class="fw-medium text-uppercase"
+  >
+    <div class="mb-2">
+      <label for="addressName">Address Type</label
+      ><span class="text-danger ms-1">*</span>
+      <select
+        class="form-control bg-light"
+        id="addressName"
+        formControlName="addressName"
+      >
+        <option value="home">Home</option>
+        <option value="office">Office</option>
+      </select>
+
+      <div
+        class="text-danger"
+        *ngIf="
+          isFormSubmitted ||
+          (addressName.invalid && (addressName.dirty || addressName.touched))
+        "
+      >
+        <span *ngIf="addressName.errors?.required"
+          >Address type Is Required
+        </span>
+      </div>
+    </div>
+    <div class="mb-2">
+      <label for="addressLine1">Address Line 1</label
+      ><span class="text-danger ms-1">*</span>
+      <input
+        type="text"
+        class="form-control"
+        id="addressLine1"
+        formControlName="addressLine1"
+        placeholder="Address Line 1"
+      />
+
+      <div
+        class="text-danger"
+        *ngIf="
+          isFormSubmitted ||
+          (addressLine1.invalid && (addressLine1.dirty || addressLine1.touched))
+        "
+      >
+        <span *ngIf="addressLine1.errors?.required"
+          >Address 1 Is Required
+        </span>
+      </div>
+      <div class="text-danger" *ngIf="addressLine1.errors?.minlength">
+        Address must be at least 5 characters long.
+      </div>
+      <div class="text-danger" *ngIf="addressLine1.errors?.maxlength">
+        Address must be in 150 characters long.
+      </div>
+    </div>
+    <div class="mb-2">
+      <label for="addressLine2">Address Line 2</label
+      ><span class="text-danger ms-1">*</span>
+      <input
+        type="text"
+        class="form-control"
+        id="addressLine2"
+        formControlName="addressLine2"
+        placeholder="Address Line 2"
+      />
+
+      <div
+        class="text-danger"
+        *ngIf="
+          isFormSubmitted ||
+          (addressLine2.invalid && (addressLine2.dirty || addressLine2.touched))
+        "
+      >
+        Address 2 Is Required
+      </div>
+    </div>
+    <div class="mb-2">
+      <label for="city">City</label><span class="text-danger ms-1">*</span>
+      <input
+        type="text"
+        class="form-control"
+        id="city"
+        formControlName="city"
+        placeholder="city"
+      />
+
+      <div
+        class="text-danger"
+        *ngIf="
+          isFormSubmitted || (city.invalid && (city.dirty || city.touched))
+        "
+      >
+        <span *ngIf="city.errors?.required">City Is Required </span>
+      </div>
+
+      <div class="text-danger" *ngIf="city.errors?.minlength">
+        City must be at least 4 characters long.
+      </div>
+      <div class="text-danger" *ngIf="city.errors?.maxlength">
+        City must be in 50 characters long.
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="mb-2">
+          <label for="state">State</label
+          ><span class="text-danger ms-1">*</span>
+          <input
+            type="text"
+            class="form-control"
+            id="state"
+            formControlName="state"
+            placeholder="state"
+          />
+          <div
+            class="text-danger"
+            *ngIf="
+              isFormSubmitted ||
+              (state.invalid && (state.dirty || state.touched))
+            "
+          >
+            <span *ngIf="state.errors?.required">state Is Required </span>
+          </div>
+
+          <div class="text-danger" *ngIf="state.errors?.minlength">
+            state must be at least 5 characters long.
+          </div>
+          <div class="text-danger" *ngIf="state.errors?.maxlength">
+            state must be in 50 characters long.
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="mb-2">
+          <label for="country">Country</label
+          ><span class="text-danger ms-1">*</span>
+          <input
+            type="text"
+            class="form-control"
+            id="country"
+            formControlName="country"
+            placeholder="country"
+          />
+
+          <div
+            class="text-danger"
+            *ngIf="
+              isFormSubmitted ||
+              (country.invalid && (country.dirty || country.touched))
+            "
+          >
+            <span *ngIf="country.errors?.required">country is Required </span>
+          </div>
+
+          <div class="text-danger" *ngIf="country.errors?.minlength">
+            Country must be at least 5 characters long.
+          </div>
+          <div class="text-danger" *ngIf="state.errors?.maxlength">
+            state must be in 50 characters long.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="mb-2">
+          <label for="pinCode">pin Code</label
+          ><span class="text-danger ms-1">*</span>
+          <input
+            type="text"
+            class="form-control"
+            id="pinCode"
+            formControlName="pinCode"
+            placeholder="pinCode"
+          />
+
+          <div
+            class="text-danger"
+            *ngIf="
+              isFormSubmitted ||
+              (pinCode.invalid && (pinCode.dirty || pinCode.touched))
+            "
+          >
+            pin Code Is Required
+          </div>
+          <div class="text-danger" *ngIf="pinCode.errors?.minlength">
+            pinCode must be at least 6 digit
+          </div>
+          <div class="text-danger" *ngIf="pinCode.errors?.maxlength">
+            pinCode must be in 6 digit
+          </div>
+          <div class="text-danger" *ngIf="pinCode.errors?.pattern">
+            pinCode must be in number
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="updateandcancle">
+      <button type="submit" class="btn btn-outline-success m-2 text-start">
+        Add Address
+      </button>
+    </div>
+  </form>
+</div>

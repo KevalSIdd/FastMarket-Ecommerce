@@ -1,64 +1,102 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
-import { ProductService } from '../services/product.service';
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { OrderService } from '../services/order.service';
+import { AgGridAngular } from 'ag-grid-angular';
+import { ColDef } from 'ag-grid-community';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { CartupdateService } from '../services/cartupdate.service';
 
 @Component({
   selector: 'app-order-history',
   templateUrl: './order-history.component.html',
   styleUrls: ['./order-history.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    CurrencyPipe,
+    DatePipe,
+    AgGridAngular,
+    MatPaginatorModule
+  ],
+  providers: [DatePipe, CurrencyPipe]
 })
 export class OrderHistoryComponent implements OnInit {
-  listOfData: any[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ];
-  user: any;
-  orders: any[] = [];
-  error = '';
-  constructor(
-    private _api: ApiService,
-    private _auth: AuthService,
-    private _product: ProductService
-  ) {
-    this.user = this._auth.getUser();
+
+  orders: any[] = []
+  length: number
+  pageSize = 5;
+  pageIndex = 0;
+  pageSizeOptions = [5, 10, 25];
+  pageEvent: PageEvent;
+  currentPage = 1;
+
+  handlePageEvent(e: PageEvent) {
+    this.pageSize = e.pageSize;
+    this.currentPage = e.pageIndex + 1;
+    this.getorders()
   }
 
+
+  constructor(private router: Router, private auth: AuthService, private order: OrderService,
+    private currency: CurrencyPipe, private date: DatePipe, private cartupdate: CartupdateService
+  ) { }
+
   ngOnInit(): void {
-    this._api.getTypeRequest(`orders/?userId=${this.user.id}`).subscribe(
-      (res: any) => {
-        console.log(res);
-        res.data.forEach((item) => {
-          this._product
-            .getSingleProduct(item.product_id)
-            .subscribe((product) => {
-              console.log(product);
-              this.orders.push({ ...product, ...item });
-            });
-        });
-        // let uniqueProductsArray = Array.from(
-        //   new Set(res.data.map((p) => p.product_id))
-        // );
-      },
-      (err) => {
-        this.error = err.error.message;
-      }
-    );
+    this.getorders()
+
+
+    this.cartupdate.orderPlaced$.subscribe(() => {
+      this.getorders()
+    })
+
   }
+
+  colDefs: ColDef[] = [
+    { field: "iOrderNumber", headerName: 'OrderID', minWidth: 100, sortable: false },
+    {
+      field: "dtOrderDate", headerName: 'Order Date', flex: 1,
+      cellRenderer: (p: any) => {
+        return this.date.transform(p.value, 'MMM d, y')
+      },
+      sortable: false
+    },
+    {
+      field: "dSubTotal", headerName: 'Total', minWidth: 100,
+      cellRenderer: (p: any) => {
+        return this.currency.transform(p.value, 'USD')
+      },
+      sortable: false
+    },
+  ];
+
+
+  pageChange(page: number) {
+    this.currentPage = page
+  }
+
+
+  getorders() {
+    const userId = this.auth.getUserID()
+    const payload = {
+      currentPage: this.currentPage,
+      pageSize: this.pageSize,
+      userId
+    }
+
+    this.order.getorder(payload).subscribe((resp: any) => {
+      if (resp.success === 1) {
+        this.orders = resp.data
+        this.length = resp.totalRecords
+      }
+    }), (error: any) => {
+      console.log(error.message);
+    }
+  }
+
+  navigateToOrderDetails(orderid: any) {
+    this.router.navigate(['/order-details', orderid])
+  }
+
 }

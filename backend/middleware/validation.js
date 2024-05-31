@@ -38,8 +38,19 @@ const updateUserValidation = (data) => {
   return schema.validate(data, options);
 };
 
+// add review validation
+const addReviewValidation = (data) => {
+  const schema = Joi.object({
+    userId: Joi.number().required().strict(),
+    rating: Joi.number().required().strict(),
+    productId: Joi.number().required().strict(),
+    description: Joi.string().required().strict(),
+  });
+  return schema.validate(data, options);
+};
 module.exports = {
   registerValidation,
   loginValidation,
   updateUserValidation,
+  addReviewValidation,
 };

@@ -8,23 +8,11 @@
         <div class="product-name">{{ title }}</div>
         <div class="product-short-desc">{{ short_desc }}</div>
       </div>
-      <div class="product-price">{{ price | currency: "USD" }}</div>
+      <div class="product-price">{{ price | currency : "USD" }}</div>
     </header>
   </div>
   <div class="product-card__cta">
-    <button
-      nz-button
-      [disabled]="quantity === 0"
-      (click)="
-        onAdd({
-          id: id,
-          price: price,
-          image: image,
-          title: title,
-          maxQuantity: quantity
-        })
-      "
-    >
+    <button nz-button [disabled]="quantity === 0" (click)="addProducts(id)">
       {{ quantity === 0 ? "Out of stock" : "Add to cart" }}
     </button>
   </div>

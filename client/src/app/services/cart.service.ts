@@ -1,128 +1,94 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { ApiService } from './api.service';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth.service';
+import { ProductService } from './product.service';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  cartData = {
-    products: [],
-    total: 0,
-  };
+  public products: any[] = []
 
-  cartDataObs$ = new BehaviorSubject(this.cartData);
 
   constructor(
-    private _notification: NzNotificationService,
-    private _api: ApiService
-  ) {
-    let localCartData = JSON.parse(localStorage.getItem('cart'));
-    if (localCartData) this.cartData = localCartData;
+    private http: HttpClient,
+    private authuser: AuthService,
+    private getsinglePid: ProductService
+  ) { }
 
-    this.cartDataObs$.next(this.cartData);
+  getCartItem(userId: number): Observable<any> {
+    userId = this.authuser.getUserID();
+    const data = this.http.get<any>(`${environment.apiUrl}cart/list`, { params: { userId } })
+    return data
   }
 
-  submitCheckout(userId, cart) {
-    return this._api.postTypeRequest('orders/create', {
-      userId: userId,
-      cart: cart,
+
+  addProduct(qty: number, productId: number): Observable<any> {
+    const userId = this.authuser.getUserID(); // Get the correct userId from AuthService
+
+    return new Observable(observer => {
+      const payload = { id: productId, userId };
+
+      this.getsinglePid.getSingleProduct(payload).subscribe(
+        (product: any) => {
+          const cartPayload = {
+            userId,
+            qty,
+            productId: product.id
+          };
+
+
+          this.http.post<any>(`${environment.apiUrl}cart/add`, cartPayload).subscribe(
+            (response) => {
+              observer.next(response);
+              observer.complete();
+            },
+            (error) => {
+              observer.error(error);
+            }
+          );
+        },
+        (error) => {
+          observer.error(error); // Handle error when fetching the product
+        }
+      );
     });
   }
 
-  addProduct(params): void {
-    const { id, price, quantity, image, title, maxQuantity } = params;
-    const product = { id, price, quantity, image, title, maxQuantity };
 
-    if (!this.isProductInCart(id)) {
-      if (quantity) this.cartData.products.push(product);
-      else this.cartData.products.push({ ...product, quantity: 1 });
-    } else {
-      // copy array, find item index and update
-      let updatedProducts = [...this.cartData.products];
-      let productIndex = updatedProducts.findIndex((prod) => prod.id == id);
-      let product = updatedProducts[productIndex];
+  updateProduct(qty: number, productId: number): Observable<any> {
 
-      // if no quantity, increment
-      if (quantity) {
-        updatedProducts[productIndex] = {
-          ...product,
-          quantity: quantity,
-        };
-      } else {
-        updatedProducts[productIndex] = {
-          ...product,
-          quantity: product.quantity + 1,
-        };
-      }
+    const userId = this.authuser.getUserID(); // Get the correct userId from AuthService
 
-      console.log(updatedProducts);
-      this.cartData.products = updatedProducts;
-    }
+    return new Observable(observer => {
+      const payload = { id: productId, userId };
 
-    this.cartData.total = this.getCartTotal();
-    this._notification.create(
-      'success',
-      'Product added to cart',
-      `${title} was successfully added to the cart`
-    );
-    this.cartDataObs$.next({ ...this.cartData });
-    localStorage.setItem('cart', JSON.stringify(this.cartData));
-  }
+      this.getsinglePid.getSingleProduct(payload).subscribe(
+        (product: any) => {
+          const cartPayload = {
+            userId,
+            qty,
+            productId: product.id
+          };
 
-  updateCart(id: number, quantity: number): void {
-    // copy array, find item index and update
-    let updatedProducts = [...this.cartData.products];
-    let productIndex = updatedProducts.findIndex((prod) => prod.id == id);
 
-    updatedProducts[productIndex] = {
-      ...updatedProducts[productIndex],
-      quantity: quantity,
-    };
-
-    this.cartData.products = updatedProducts;
-    this.cartData.total = this.getCartTotal();
-    this.cartDataObs$.next({ ...this.cartData });
-    console.log(this.cartData.products);
-    localStorage.setItem('cart', JSON.stringify(this.cartData));
-  }
-
-  removeProduct(id: number): void {
-    let updatedProducts = this.cartData.products.filter(
-      (prod) => prod.id !== id
-    );
-    this.cartData.products = updatedProducts;
-    this.cartData.total = this.getCartTotal();
-    this.cartDataObs$.next({ ...this.cartData });
-    localStorage.setItem('cart', JSON.stringify(this.cartData));
-
-    this._notification.create(
-      'success',
-      'Removed successfully',
-      'The selected item was removed from the cart successfully'
-    );
-  }
-
-  clearCart(): void {
-    this.cartData = {
-      products: [],
-      total: 0,
-    };
-    this.cartDataObs$.next({ ...this.cartData });
-    localStorage.setItem('cart', JSON.stringify(this.cartData));
-  }
-
-  getCartTotal(): number {
-    let totalSum = 0;
-    this.cartData.products.forEach(
-      (prod) => (totalSum += prod.price * prod.quantity)
-    );
-
-    return totalSum;
-  }
-
-  isProductInCart(id: number): boolean {
-    return this.cartData.products.findIndex((prod) => prod.id === id) !== -1;
+          this.http.post<any>(`${environment.apiUrl}cart/add`, cartPayload).subscribe(
+            (response) => {
+              observer.next(response);
+              observer.complete();
+            },
+            (error) => {
+              observer.error(error);
+            }
+          );
+        },
+        (error) => {
+          observer.error(error); // Handle error when fetching the product
+        }
+      );
+    });
   }
 }

@@ -1,0 +1,117 @@
+<ngb-accordion #accordion="ngbAccordion">
+  <ngb-panel>
+    <ng-template ngbPanelTitle>
+      <span>Payment Details</span><span class="text-danger ms-1">*</span>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <div class="container">
+        <form [formGroup]="PaymentForm" (ngSubmit)="submit()">
+          <div class="mb-3">
+            <label for="cardNumber" class="form-label">Card number</label>
+            <span class="text-danger ms-1">*</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cardNumber"
+              placeholder="1234 1234 1234 1234"
+              formControlName="cardNumber"
+              inputmode="numeric"
+              [maskito]="cardMask"
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                isFormSubmitted ||
+                (cardNumber.invalid && (cardNumber.dirty || cardNumber.touched))
+              "
+            >
+              <span *ngIf="cardNumber.errors?.required"
+                >Card Number Is Required
+              </span>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="cardName" class="form-label">Name on card</label>
+            <span class="text-danger ms-1">*</span>
+            <input
+              type="text"
+              class="form-control"
+              id="cardName"
+              placeholder="John Doe"
+              formControlName="cardName"
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                isFormSubmitted ||
+                (cardName.invalid && (cardName.dirty || cardName.touched))
+              "
+            >
+              <span *ngIf="cardName.errors?.required"
+                >Card Name is Required
+              </span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-2">
+                <label for="expirydate" class="form-label">Expirydate</label>
+                <span class="text-danger ms-1">*</span>
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  id="expirydate"
+                  placeholder="mm/yy"
+                  class="form-control"
+                  formControlName="expirydate"
+                  [maskito]="expriredMask"
+                />
+                <div
+                  class="text-danger"
+                  *ngIf="
+                    isFormSubmitted ||
+                    (expirydate.invalid &&
+                      (expirydate.dirty || expirydate.touched))
+                  "
+                >
+                  <span *ngIf="expirydate.errors?.required"
+                    >Expirydate is Required
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-2">
+                <label for="cvv" class="form-label">CVV</label>
+                <span class="text-danger ms-1">*</span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cvv"
+                  placeholder="123"
+                  formControlName="cvv"
+                  [maskito]="cvvMask"
+                />
+                <div
+                  class="text-danger"
+                  *ngIf="
+                    isFormSubmitted ||
+                    (cvv.invalid && (cvv.dirty || cvv.touched))
+                  "
+                >
+                  <span *ngIf="cvv.errors?.required">Cvv is Required </span>
+                </div>
+                <div class="text-danger" *ngIf="cvv.errors?.minlength">
+                  Cvv Must Be 3 digit
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-outline-success">Submit</button>
+        </form>
+      </div>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

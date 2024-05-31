@@ -1,0 +1,203 @@
+<div class="container-fluid">
+  <div class="container">
+    <!-- Title -->
+    <div class="d-flex justify-content-between align-items-center py-3">
+      <h2 class="h5 mb-0">
+        Order #<span style="font-size: smaller">{{ orderNumber }}</span>
+      </h2>
+      <h2 class="h5 mb-0">
+        Status:&nbsp;
+        <span
+          style="font-size: smaller"
+          class="badge text-bg-primary text-white"
+          >{{ payoutstatus }}</span
+        >
+      </h2>
+    </div>
+
+    <!-- Main content -->
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- Details -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="mb-3 d-flex justify-content-between">
+              <div class="d-flex">
+                Date : &nbsp; <span> {{ orderdate | date : "MMM d, y" }}</span>
+              </div>
+            </div>
+            <table class="table table-hover">
+              <thead>
+                <th
+                  style="
+                    padding: 8px;
+                    color: rgb(5, 44, 101);
+                    background-color: rgb(207, 226, 255);
+                  "
+                >
+                  Product
+                </th>
+                <th
+                  class="text-center"
+                  style="
+                    padding: 8px;
+                    color: rgb(5, 44, 101);
+                    background-color: rgb(207, 226, 255);
+                  "
+                >
+                  QTY
+                </th>
+                <th
+                  class="text-end"
+                  style="
+                    padding: 8px;
+                    color: rgb(5, 44, 101);
+                    background-color: rgb(207, 226, 255);
+                  "
+                >
+                  Unit Price
+                </th>
+                <th
+                  class="text-end"
+                  style="
+                    padding: 8px;
+                    color: rgb(5, 44, 101);
+                    background-color: rgb(207, 226, 255);
+                  "
+                >
+                  Total
+                </th>
+              </thead>
+              <tbody>
+                @for (product of orderdetails.products; track $index) {
+                <tr>
+                  <td>
+                    <div class="flex-lg-grow-1">
+                      <h6 class="mb-0">
+                        <span class="fs-6 text-muted text-start">{{
+                          product.vName
+                        }}</span>
+                      </h6>
+                    </div>
+                  </td>
+                  <td class="text-center text-muted">{{ product.quantity }}</td>
+                  <td class="text-end text-muted">
+                    {{ product.dPrice | currency : "USD" }}
+                  </td>
+                  <td class="text-end text-muted">
+                    {{ product.dSubTotal | currency : "USD" }}
+                  </td>
+                </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr class="fw-bold">
+                  <td colspan="2"></td>
+                  <td class="text-end">TOTAL</td>
+                  <td class="text-end">
+                    {{ totalAmount | currency : "USD" }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <!-- Payment -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <h3 class="h6">Payment Method</h3>
+                <hr />
+                <p>
+                  Visa -1234 <br />
+                  Total:
+                  <span class="text-muted">{{
+                    totalAmount | currency : "USD"
+                  }}</span>
+                </p>
+              </div>
+              <div class="col-lg-6">
+                <h3 class="h6">Billing Address</h3>
+                <hr />
+                <address>
+                  <strong>{{
+                    orderdetails?.billingAddress?.BillingName
+                  }}</strong
+                  ><br />
+                  <span class="text-muted">{{
+                    orderdetails?.billingAddress?.BillingAddress1
+                  }}</span>
+                  ,
+                  <span class="text-muted">{{
+                    orderdetails?.billingAddress?.BillingAddress2
+                  }}</span>
+                  <br />
+                  <span class="text-muted">{{
+                    orderdetails?.billingAddress?.BillingCity
+                  }}</span>
+                  ,
+                  <span class="text-muted">{{
+                    orderdetails?.billingAddress?.BillingCountry
+                  }}</span
+                  ><br />
+                  <span class="text-muted">
+                    {{ orderdetails?.billingAddress?.BillingState }}</span
+                  >
+                </address>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <!-- Customer Notes -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3 class="h6">Customer Details</h3>
+            <hr />
+            Name:<span class="text-muted"
+              >&nbsp;{{ currentUser?.username }}</span
+            ><br />
+            Email:<span class="text-muted">&nbsp;{{ currentUser?.email }}</span
+            ><br />
+            Phone:<span class="text-muted"
+              >&nbsp;{{ orderdetails?.address?.vPhone }}</span
+            >
+          </div>
+        </div>
+        <div class="card mb-4">
+          <!-- Shipping information -->
+          <div class="card-body">
+            <h3 class="h6">Shipping Address</h3>
+            <hr />
+            <h3 class="h6">Address</h3>
+            <address>
+              <strong>{{ orderdetails?.shippingAddress?.ShippingName }}</strong
+              ><br />
+              <span class="text-muted">{{
+                orderdetails?.shippingAddress?.ShippingAddress1
+              }}</span>
+              ,
+              <span class="text-muted">{{
+                orderdetails?.shippingAddress?.ShippingAddress2
+              }}</span>
+              <br />
+              <span class="text-muted">{{
+                orderdetails?.shippingAddress?.ShippingCity
+              }}</span>
+              ,
+              <span class="text-muted">{{
+                orderdetails?.shippingAddress?.ShippingCountry
+              }}</span
+              ><br />
+              <span class="text-muted">
+                {{ orderdetails?.shippingAddress?.ShippingState }}</span
+              >
+            </address>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

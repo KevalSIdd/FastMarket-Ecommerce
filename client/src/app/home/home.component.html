@@ -1,22 +1,33 @@
 <div class="home-container">
   <div class="categories">
     <div class="categories__header">
-      <h2>Categories</h2>
+      <h2 class="text-start">Categories</h2>
     </div>
-    <div class="categories__list">
-      <swiper
-        [zoom]="false"
-        [slidesPerView]="screenWidth > 1200 ? 3 : 1"
-        [spaceBetween]="50"
-        [pagination]="true"
-        [loop]="true"
+    <div class="categories-list">
+      <ngb-carousel
+        [interval]="5000"
+        [wrap]="true"
+        [keyboard]="true"
+        [pauseOnHover]="false"
+        style="width: 1097px"
       >
-        <ng-template swiperSlide *ngFor="let c of categories">
-          <div class="category-card">{{ c.name }}</div>
+        <ng-template ngbSlide *ngFor="let product of products">
+          <div class="category-card">
+            <img
+              [src]="product.image"
+              alt="{{ product.title }}"
+              class="product-image"
+            />
+          </div>
         </ng-template>
-      </swiper>
+      </ngb-carousel>
+
+      <div *ngIf="loading" class="loading-spinner">
+        <nz-spin nzSimple> </nz-spin>
+      </div>
     </div>
   </div>
+
   <div class="products">
     <div class="products__header">
       <h2>New Products</h2>

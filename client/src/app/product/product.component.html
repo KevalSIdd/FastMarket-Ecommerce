@@ -1,35 +1,43 @@
-<div class="product-container" *ngIf="!loading">
+<!-- <div class="product-container" *ngIf="!loading">
   <div>
     <div class="product-container__image">
-      <!-- Single Image -->
-      <swiper
-        [zoom]="true"
-        [slidesPerView]="1"
-        [spaceBetween]="50"
-        [pagination]="true"
+      
+      <swiper-container
+        loop="true"
+        slides-per-view="1"
+        pagination="true"
+        navigation="true"
         *ngIf="showcaseImages.length === 0"
       >
-        <ng-template swiperSlide [zoom]="true">
-          <img src="{{ product.image }}" alt="`Product image`" />
-        </ng-template>
-      </swiper>
-      <!-- Multiple images -->
-      <swiper
-        [zoom]="true"
-        [slidesPerView]="1"
-        [spaceBetween]="50"
-        [pagination]="true"
+        <swiper-slide>
+          <img
+            [src]="product.image"
+            alt="{{ product.title }}"
+            class="product-image"
+          />
+        </swiper-slide>
+      </swiper-container>
+
+      
+
+      <swiper-container
+        loop="true"
+        slides-per-view="1"
+        pagination="true"
         *ngIf="showcaseImages.length > 0"
+        style="
+          width: 80%;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+        "
+        effect="fade"
       >
-        <ng-template
-          swiperSlide
-          [zoom]="true"
-          *ngFor="let image of showcaseImages; index as i"
-        >
-          <img src="{{ image }}" alt="`Product image`" />
-        </ng-template>
-      </swiper>
+        <swiper-slide *ngFor="let image of showcaseImages; index as i">
+          <img [src]="image" alt="`Product image`" />
+        </swiper-slide>
+      </swiper-container>
     </div>
+
     <div class="product-container__details">
       <h2 class="title">{{ product.title }}</h2>
       <div class="reviews">
@@ -46,14 +54,14 @@
         >
       </div>
       <div class="price-container">
-        <h2 class="price">{{ product.price | currency: "USD" }}</h2>
+        <h2 class="price">{{ product.price | currency : "USD" }}</h2>
         <span
           class="availability"
           [ngStyle]="{ color: quantity > 0 ? 'inherit' : 'red' }"
           >{{ quantity === 0 ? "Out of stock" : "In stock" }}</span
         >
       </div>
-      <div class="description">{{ product.description }}</div>
+      <div class="description">About The Item : {{ product.description }}</div>
       <div class="cta">
         <div class="add-to-cart">
           <span>QTY:</span>
@@ -66,7 +74,7 @@
           <button
             nz-button
             nzType="primary"
-            (click)="addToCart()"
+            (click)="addToCart(id)"
             [disabled]="quantity === 0"
           >
             Add to cart
@@ -86,4 +94,138 @@
     </div>
   </div>
   <div class="additional"></div>
+</div> -->
+<div class="product-container" *ngIf="!loading">
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-7">
+        <swiper-container
+          loop="true"
+          slides-per-view="1"
+          pagination="true"
+          navigation="true"
+          *ngIf="showcaseImages.length === 0"
+        >
+          <swiper-slide>
+            <img
+              [src]="product?.image"
+              alt="{{ product?.title }}"
+              class="product-image"
+            />
+          </swiper-slide>
+        </swiper-container>
+
+        <swiper-container
+          loop="true"
+          slides-per-view="1"
+          pagination="true"
+          zoom="true"
+          navigation="true"
+          *ngIf="showcaseImages.length > 0"
+          effect="fade"
+        >
+          <swiper-slide *ngFor="let image of showcaseImages; index as i">
+            <img [src]="image" alt="`Product image`" />
+          </swiper-slide>
+        </swiper-container>
+      </div>
+
+      <div class="col-md-5">
+        <h1 class="fs-3">{{ product?.title }}</h1>
+        <p class="text-muted">
+          {{ product?.description }}
+        </p>
+        <h2 class="fs-4">{{ product?.price | currency : "USD" }}</h2>
+
+        <div class="d-flex align-items-center mb-3">
+          <label for="quantity" class="me-2">Quantity:</label>
+          <nz-input-number
+            [(ngModel)]="quantity"
+            [nzMin]="1"
+            [nzMax]="product?.quantity > 0 ? product?.quantity : 0"
+            [nzStep]="1"
+            (keypress)="validateNumericInput($event)"
+          ></nz-input-number>
+          <span
+            class="availability ms-2 fs-5"
+            [ngStyle]="{ color: quantity > 0 ? 'green' : 'red' }"
+            >{{ quantity === 0 ? "Out of stock" : "In stock" }}</span
+          >
+        </div>
+
+        <div class="d-flex mt-2 mb-5">
+          <button
+            class="btn btn-warning me-2"
+            nz-button
+            nzType="primary"
+            (click)="addToCart(id)"
+            [disabled]="quantity === 0"
+            style="width: 37%; height: 27%; border-radius: 18px"
+          >
+            Add to Cart
+          </button>
+          <!-- <button
+            class="btn rounded-5"
+            style="background: #ffa41c; border-color: #ff8f00; width: 37%"
+            routerLink="/newcheckout"
+            (click)="addToCart(id)"
+          >
+            Buy Now
+          </button> -->
+        </div>
+        <ul class="nav nav-tabs mb-3" id="productDetailsTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="review-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#review-content"
+              type="button"
+              role="tab"
+              aria-controls="review-content"
+              aria-selected="true"
+            >
+              Review
+            </button>
+          </li>
+          <li class="nav-item" role="presentation" *ngIf="!product?.isRated">
+            <button
+              class="nav-link"
+              id="add-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#add-review"
+              type="button"
+              role="tab"
+              aria-controls="add-review"
+              aria-selected="false"
+            >
+              Add Review
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="productDetailsTabsContent">
+          <div
+            class="tab-pane fade show active"
+            id="review-content"
+            role="tabpanel"
+            aria-labelledby="review-tab"
+          >
+            <app-review [productId]="id" [reviewdata]="reviews"></app-review>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="add-review"
+            role="tabpanel"
+            aria-labelledby="add-tab"
+            *ngIf="showAddReview"
+          >
+            <app-add-review (reviewAdded)="onReviewAdded($event)">
+            </app-add-review>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

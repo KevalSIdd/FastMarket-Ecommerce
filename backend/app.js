@@ -1,8 +1,8 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const path = require("path");
-const logger = require("morgan");
-const cors = require("cors");
+const express = require('express');
+const dotenv = require('dotenv');
+const path = require('path');
+const logger = require('morgan');
+const cors = require('cors');
 
 // Config .env file
 dotenv.config({
@@ -14,20 +14,20 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(logger("dev"));
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Router index
-const indexRouter = require("./routes/index");
-app.use("/", indexRouter);
+const indexRouter = require('./routes/index');
+app.use('/', indexRouter);
 
 // Health check
-app.get("/", (req, res) => {
-  res.status(200).send("Health Check");
+app.get('/', (req, res) => {
+  res.status(200).send('Health Check');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3200;
 const ENV = process.env.NODE_ENV || null;
 
 app.listen(PORT, () => {

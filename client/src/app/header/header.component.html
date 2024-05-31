@@ -16,11 +16,17 @@
     </button>
   </div>
   <div class="header-container__middle">
-    <h3 routerLink="/">Eccom</h3>
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      class="font fs-2 m-1 bg-body-tertiary opacity-75 text-decoration-none text-dark"
+    >
+      FASTMARKET
+    </a>
   </div>
   <div class="header-container__right">
     <ng-container>
-      <div class="cart-counter">{{ cartData.products.length }}</div>
+      <div class="cart-counter">{{ cartItems?.length }}</div>
       <button
         nz-button
         nz-dropdown
@@ -43,27 +49,27 @@
         <div class="cart-dropdown">
           <div
             class="cart-dropdown__empty"
-            *ngIf="cartData.products.length === 0"
+            *ngIf="!(cartItems && cartItems.length)"
           >
             Your cart is empty.
           </div>
           <div
             class="cart-dropdown__content"
-            *ngIf="cartData.products.length !== 0"
+            *ngIf="cartItems && cartItems.length"
           >
             <div class="product-list">
               <div
                 class="product-list__item"
-                *ngFor="let product of cartData.products; index as i"
+                *ngFor="let product of cartItems; index as i"
                 [ngStyle]="{
                   'border-bottom':
-                    i !== cartData.products.length - 1 && '1px solid #ccc'
+                    i !== cartItems.length - 1 && '1px solid #ccc'
                 }"
               >
                 <div class="product-item">
                   <div
                     class="product-item__remove"
-                    (click)="removeProductFromCart(product.id)"
+                    (click)="removeProductFromCart(product.id, 0)"
                   >
                     X
                   </div>
@@ -73,8 +79,8 @@
                   <div class="product-item__description">
                     <div class="product-name">{{ product.title }}</div>
                     <div class="product-amount">
-                      {{ product.quantity }} x
-                      <span>{{ product.price | currency: "USD" }}</span>
+                      {{ product.iQty }} x
+                      <span>{{ product.price | currency : "USD" }}</span>
                     </div>
                   </div>
                 </div>
@@ -82,10 +88,10 @@
             </div>
             <div class="cart-info">
               <div class="selected-amount">
-                {{ cartData.products.length }} Item(s) selected
+                {{ getTotalItems() }} Item(s) selected
               </div>
               <div class="total-price">
-                Total: {{ cartData.total | currency: "USD" }}
+                Total: {{ getTotalPrice() | currency : "USD" }}
               </div>
             </div>
             <div class="cart-cta">
@@ -94,11 +100,6 @@
                 nzSize="large"
                 routerLink="/cart"
                 (click)="toggleDropdown()"
-                [ngStyle]="{
-                  borderLeft: 'none',
-                  borderRight: 'none',
-                  borderBottom: 'none'
-                }"
               >
                 View cart
               </button>
@@ -106,13 +107,8 @@
                 nz-button
                 nzType="primary"
                 nzSize="large"
-                routerLink="/checkout"
+                routerLink="/newcheckout"
                 (click)="toggleDropdown()"
-                [ngStyle]="{
-                  borderLeft: 'none',
-                  borderRight: 'none',
-                  borderBottom: 'none'
-                }"
               >
                 Checkout
               </button>
@@ -124,26 +120,11 @@
   </div>
 </header>
 
-<!-- <div class="nav-container" *ngIf="!isMobile">
-  <nav>
-    <ul>
-      <li routerLink="/">Home</li>
-      <li routerLink="/login">Login</li>
-      <li routerLink="/register">Register</li>
-      <li routerLink="/profile">Profile</li>
-      <li routerLink="/cart">Cart</li>
-      <li routerLink="/product/1">Product</li>
-      <li routerLink="/checkout">Checkout</li>
-      <li routerLink="/order-history">Order History</li>
-    </ul>
-  </nav>
-</div> -->
-
 <div [className]="isMenuOpen ? 'side-menu show' : 'side-menu'">
   <i nz-icon nzType="close" nzTheme="outline" (click)="toggleMenu()"></i>
   <div class="side-menu__content">
-    <h2 routerLink="/" (click)="toggleMenu()">Eccom</h2>
-    <nav>
+    <h2 (click)="toggleMenu()" class="font fw-medium fs-3">FASTMARKET</h2>
+    <nav class="fs-6">
       <ul>
         <li routerLink="/" (click)="toggleMenu()">Home</li>
         <li routerLink="/cart" (click)="toggleMenu()">Cart</li>
@@ -151,9 +132,14 @@
         <li routerLink="/order-history" (click)="toggleMenu()">
           Order History
         </li>
+        <li routerLink="/billinglist" (click)="toggleMenu()">Address List</li>
       </ul>
     </nav>
-    <div class="🍑">
+
+    <div class="signin">
+      <div class="mb-2 text-start">
+        <strong>Logged User : {{ username }}</strong>
+      </div>
       <button
         nz-button
         routerLink="/login"
@@ -170,7 +156,12 @@
       >
         Sign up
       </button>
-      <button nz-button routerLink="/" (click)="logout() && toggleMenu()" *ngIf="isLoggedIn">
+      <button
+        nz-button
+        routerLink="/"
+        (click)="logout() && toggleMenu()"
+        *ngIf="isLoggedIn"
+      >
         Sign out
       </button>
     </div>

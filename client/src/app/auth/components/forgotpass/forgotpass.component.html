@@ -1,0 +1,37 @@
+<div class="forgot-container">
+  <div class="form-container">
+    <h2>Forgot Password</h2>
+    <nz-alert
+      *ngIf="error"
+      nzShowIcon
+      nzType="error"
+      [nzMessage]="error"
+      [ngStyle]="{ 'margin-bottom': '16px' }"
+    ></nz-alert>
+    <form (ngSubmit)="onSubmit()">
+      <div class="card">
+        <div class="card-body">
+          <div class="input-container">
+            <label for="email">Email address</label>
+            <input
+              nz-input
+              type="email"
+              name="email"
+              placeholder="Enter email address"
+              [(ngModel)]="email"
+            />
+          </div>
+          <div class="button-class">
+            <button nz-button type="submit" [nzLoading]="loading">
+              Recevie via Email
+            </button>
+          </div>
+
+          <div class="acc-link">
+            Go Back To<a routerLink="/login" class="forlogin"> Login</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

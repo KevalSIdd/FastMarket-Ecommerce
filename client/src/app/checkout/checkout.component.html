@@ -10,30 +10,180 @@
   <!-- FIRST STEP -->
   <div *ngIf="currentStep === 1">
     <div class="billing-container">
-      <h2>Billing Address</h2>
-      <form>
-        <div
-          class="input-container"
-          *ngFor="let field of billingAddress; index as i"
-        >
-          <label for="">{{ field.name }}</label>
-          <input
-            nz-input
-            [type]="field.type"
-            [name]="field.name"
-            [placeholder]="field.placeholder"
-            [(value)]="field.value"
-            [(ngModel)]="field.value"
-          />
+      <div class="text-start fs-2 fw-medium">Billing Address</div>
+      <form (ngSubmit)="submitBilling()" [formGroup]="addressForm" class="m-2">
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="addressType" class="form-label"
+              >Select Address Type</label
+            >
+            <select
+              class="form-select"
+              id="addressType"
+              name="addressType"
+              formControlName="addressType"
+            >
+              <option value="home">Home Address</option>
+              <option value="office">Office Address</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="addressLine1" class="form-label">Address Line 1</label>
+            <input
+              type="text"
+              class="form-control"
+              id="addressLine1"
+              name="addressLine1"
+              formControlName="addressLine1"
+            />
+            <div
+              class="text-danger"
+              *ngIf="
+                isFormSubmitted ||
+                (addressLine1.invalid &&
+                  (addressLine1.dirty || addressLine1.touched))
+              "
+            >
+              <span *ngIf="addressLine1.errors?.required"
+                >Address 1 Is Required
+              </span>
+            </div>
+            <div class="text-danger" *ngIf="addressLine1.errors?.minlength">
+              Address must be at least 5 characters long.
+            </div>
+            <div class="text-danger" *ngIf="addressLine1.errors?.maxlength">
+              Address must be in 150 characters long.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="addressLine2" class="form-label">Address Line 2</label>
+            <input
+              type="text"
+              class="form-control"
+              id="addressLine2"
+              name="addressLine2"
+              formControlName="addressLine2"
+            />
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="city" class="form-label">City</label>
+              <input
+                type="text"
+                class="form-control"
+                id="city"
+                name="city"
+                formControlName="city"
+              />
+              <div
+                class="text-danger"
+                *ngIf="
+                  isFormSubmitted ||
+                  (city.invalid && (city.dirty || city.touched))
+                "
+              >
+                <span *ngIf="city.errors?.required">City Is Required </span>
+              </div>
+
+              <div class="text-danger" *ngIf="city.errors?.minlength">
+                City must be at least 4 characters long.
+              </div>
+              <div class="text-danger" *ngIf="city.errors?.maxlength">
+                City must be in 50 characters long.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="state" class="form-label">State</label>
+              <input
+                type="text"
+                class="form-control"
+                id="State"
+                name="State"
+                formControlName="State"
+              />
+              <div
+                class="text-danger"
+                *ngIf="
+                  isFormSubmitted ||
+                  (State.invalid && (State.dirty || State.touched))
+                "
+              >
+                <span *ngIf="State.errors?.required">State Is Required </span>
+              </div>
+
+              <div class="text-danger" *ngIf="State.errors?.minlength">
+                State must be at least 4 characters long.
+              </div>
+              <div class="text-danger" *ngIf="State.errors?.maxlength">
+                State must be in 50 characters long.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input
+                type="text"
+                class="form-control"
+                id="Country"
+                name="Country"
+                formControlName="Country"
+              />
+
+              <div
+                class="text-danger"
+                *ngIf="
+                  isFormSubmitted ||
+                  (Country.invalid && (Country.dirty || Country.touched))
+                "
+              >
+                <span *ngIf="Country.errors?.required"
+                  >Country Is Required
+                </span>
+              </div>
+
+              <div class="text-danger" *ngIf="Country.errors?.minlength">
+                Country must be at least 4 characters long.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="zipCode" class="form-label">Zip Code</label>
+              <input
+                type="text"
+                class="form-control"
+                id="ZipCode"
+                name="ZipCode"
+                maxlength="6"
+                formControlName="ZipCode"
+              />
+              <div
+                class="text-danger"
+                *ngIf="
+                  isFormSubmitted ||
+                  (ZipCode.invalid && (ZipCode.dirty || ZipCode.touched))
+                "
+              >
+                Zip Code Is Required
+              </div>
+              <div class="text-danger" *ngIf="ZipCode.errors?.minlength">
+                ZipCode must be at least 6 digit
+              </div>
+              <div class="text-danger" *ngIf="ZipCode.errors?.maxlength">
+                ZipCode must be in 6 digit
+              </div>
+              <div class="text-danger" *ngIf="ZipCode.errors?.pattern">
+                ZipCode must be in number
+              </div>
+            </div>
+          </div>
+          <div class="col-12 mx-auto">
+            <button type="submit" class="btn btn-outline-primary w-100 h-100">
+              Submit
+            </button>
+          </div>
         </div>
       </form>
-      <button
-        nz-button
-        (click)="submitBilling()"
-        [disabled]="canBillingSubmit()"
-      >
-        Continue
-      </button>
     </div>
   </div>
   <!-- SECOND STEP -->
@@ -106,7 +256,7 @@
           <div><span>Item(s)</span> {{ cartData.products.length }}</div>
           <div><span>Payment method</span> Credit</div>
           <div>
-            <span>Order total</span> {{ cartData.total | currency: "USD" }}
+            <span>Order total</span> {{ cartData.total | currency : "USD" }}
           </div>
         </div>
         <button
@@ -129,8 +279,8 @@
               {{ item.title }}
             </div>
             <div class="item-total">
-              {{ item.price | currency: "USD" }} x {{ item.quantity }} =
-              {{ item.quantity * item.price | currency: "USD" }}
+              {{ item.price | currency : "USD" }} x {{ item.quantity }} =
+              {{ item.quantity * item.price | currency : "USD" }}
             </div>
           </div>
         </div>
@@ -163,8 +313,8 @@
               {{ item.title }}
             </div>
             <div class="item-total">
-              {{ item.price | currency: "USD" }} x {{ item.quantity }} =
-              {{ item.quantity * item.price | currency: "USD" }}
+              {{ item.price | currency : "USD" }} x {{ item.quantity }} =
+              {{ item.quantity * item.price | currency : "USD" }}
             </div>
           </div>
         </div>

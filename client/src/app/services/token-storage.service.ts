@@ -7,7 +7,7 @@ export class TokenStorageService {
   TOKEN_KEY = 'auth-token';
   USER_KEY = 'auth-user';
 
-  constructor() {}
+  constructor() { }
 
   public getToken(): string {
     return sessionStorage.getItem(this.TOKEN_KEY);
@@ -22,7 +22,7 @@ export class TokenStorageService {
     return JSON.parse(sessionStorage.getItem(this.USER_KEY));
   }
 
-  setUser(user): void {
+  setUser(user: any): void {
     sessionStorage.removeItem(this.USER_KEY);
     sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }

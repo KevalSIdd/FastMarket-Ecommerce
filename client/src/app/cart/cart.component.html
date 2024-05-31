@@ -1,58 +1,120 @@
-<div class="cart-container">
-  <div class="cart-container__empty" *ngIf="cartData.products.length === 0">
-    Your cart is empty.
-  </div>
-  <div class="cart-container__list" *ngIf="cartData.products.length > 0">
-    <header class="list-header">
-      <h2>Cart</h2>
-    </header>
-    <div
-      class="list-item"
-      *ngFor="let product of cartData.products; index as i"
-      [ngStyle]="{ border: i === cartData.products.length - 1 && 'none' }"
-    >
-      <div class="list-item__remove" (click)="removeCartItem(product.id)">
-        X
+<div class="container px-3 my-5 clearfix">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">Shopping Cart</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="cartItems.length === 0" class="alert alert-info" role="alert">
+        Your cart is empty.
       </div>
-      <div class="list-item__image">
-        <img [src]="product.image" alt="" />
+      <div class="table-responsive" *ngIf="cartItems.length > 0">
+        <table class="table table-bordered m-0">
+          <thead>
+            <tr>
+              <th class="text-center py-3 px-4" style="min-width: 400px">
+                Product Name &amp; Details
+              </th>
+              <th class="text-end py-3 px-4" style="width: 100px">Price</th>
+              <th class="text-center py-3 px-4" style="width: 120px">
+                Quantity
+              </th>
+              <th class="text-end py-3 px-4" style="width: 100px">Total</th>
+              <th
+                class="text-center align-middle py-3 px-0"
+                style="width: 40px"
+              >
+                <a
+                  href="#"
+                  class="shop-tooltip float-none text-light"
+                  title=""
+                  data-original-title="Clear cart"
+                  ><i class="ino ion-md-trash"></i
+                ></a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of cartItems; track $index) {
+
+            <tr>
+              <td class="p-4">
+                <div class="media align-items-center">
+                  <img
+                    [src]="item.image"
+                    class="d-block ui-w-40 ui-bordered mr-4 rounded-1 mb-2"
+                    alt=""
+                  />
+                  <div class="media-body">
+                    {{ item.title }}
+                  </div>
+                </div>
+              </td>
+              <td class="text-end font-weight-semibold align-middle p-4">
+                {{ item.price | currency : "USD" }}
+              </td>
+              <td class="align-middle p-4">
+                <input
+                  type="number"
+                  minlength="1"
+                  class="form-control"
+                  [(ngModel)]="item.iQty"
+                  (change)="updateQuantity(item.id, item.iQty)"
+                />
+              </td>
+              <td class="text-end font-weight-semibold align-middle p-4">
+                {{ item.iQty * item.price | currency : "USD" }}
+              </td>
+              <td class="text-center align-middle px-0">
+                <a
+                  (click)="removeItem(item.id, 0)"
+                  class="shop-tooltip close float-none text-danger fs-4 text-decoration-none"
+                  title=""
+                  data-original-title="Remove"
+                  >X</a
+                >
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
       </div>
-      <div class="list-item__details">
-        <div class="title">{{ product.title }}</div>
-        <div class="price">{{ product.price | currency: "USD" }}</div>
-        <div class="cta">
-          <nz-input-number
-            [(ngModel)]="product.quantity"
-            [nzMin]="product.maxQuantity > 0 ? 1 : 0"
-            [nzMax]="product.maxQuantity > 0 ? product.maxQuantity : 0"
-            [nzStep]="1"
-            (ngModelChange)="updateCart(product.id, product.quantity)"
-          ></nz-input-number>
+
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-center pb-4"
+      >
+        <div
+          class="d-flex text-end"
+          style="margin-left: 92%"
+          *ngIf="cartItems.length > 0"
+        >
+          <div class="mt-4">
+            <label class="text-muted font-weight-normal m-0">Total price</label>
+            <div class="text-large">
+              <strong>{{ calculateFinalTotal() | currency : "USD" }}</strong>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="cart-container__total">
-    <div class="price">
-      <span>
-        <h3>Total amount</h3>
-        <h2>{{ cartData.total | currency: "USD" }}</h2></span
-      >
-      <span>
-        <h3>Total items</h3>
-        <h2>{{ cartData.products.length }}</h2>
-      </span>
-    </div>
-    <div class="cta">
-      <button
-        nz-button
-        nzType="primary"
-        routerLink="/checkout"
-        [disabled]="cartData.products.length === 0"
-      >
-        Checkout
-      </button>
-      <button nz-button routerLink="/">Back to shopping</button>
+
+      <div class="float-end">
+        <button
+          type="button"
+          routerLink="/"
+          class="btn btn-lg btn-outline-secondary md-btn-flat mt-2 me-3"
+        >
+          Continue Shopping
+        </button>
+        <button
+          type="button"
+          class="btn btn-lg btn-outline-primary mt-2"
+          routerLink="/newcheckout"
+          [state]="{ data: yourDataToSend }"
+          [disabled]="cartItems.length === 0"
+          *ngIf="cartItems.length > 0"
+        >
+          Checkout
+        </button>
+      </div>
     </div>
   </div>
 </div>

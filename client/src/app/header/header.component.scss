@@ -10,13 +10,10 @@
     justify-content: center;
     align-items: center;
   }
-  &__left {
-  }
+
   &__middle {
     flex-grow: 1;
     text-align: center;
-    > h3 {
-    }
   }
   &__right {
     position: relative;
@@ -186,7 +183,7 @@
         }
       }
     }
-    .🍑 {
+    .signin {
       position: absolute;
       bottom: 0;
       left: 24px;
@@ -225,4 +222,8 @@
 .darken-background.enable {
   background-color: rgba(0, 0, 0, 0.5);
   pointer-events: auto;
+}
+
+.font {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }

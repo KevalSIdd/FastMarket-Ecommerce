@@ -1,0 +1,9 @@
+.rating {
+  display: inline-block;
+}
+
+.rating span {
+  font-size: 1.5em; /* Adjust as needed */
+  color: rgb(255, 209, 58); /* Gold-colored stars */
+  margin-right: 0.2em; /* Space between stars */
+}

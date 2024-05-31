@@ -1,6 +1,12 @@
 @import "~ng-zorro-antd/ng-zorro-antd.min.css";
-@import "~swiper/swiper-bundle";
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "ngx-toastr/toastr";
 
+@import "ag-grid-community/styles/ag-grid.css";
+
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+
+@import "bootstrap/scss/bootstrap";
 * {
   box-sizing: border-box;
 }
@@ -43,4 +49,158 @@ ul {
 .swiper-pagination-custom,
 .swiper-container-horizontal > .swiper-pagination-bullets {
   bottom: 4px;
+}
+
+.categories-list {
+  display: flex; /* A light gray-blue color */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 336px;
+}
+/* Styling for each slide in the carousel */
+.category-card {
+  display: flex; /* Use flexbox to center content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  padding: 0px;
+  /** Ensure the card takes the full height of the carousel */
+}
+
+.carousel {
+  max-width: 100%; /* Set maximum width for the carousel */
+  margin: auto; /* Center the carousel horizontally */
+}
+
+.product-image {
+  width: 422px;
+  height: 333px;
+  object-fit: cover; /* Ensure the image covers the container without distortion */
+  border-radius: 5px;
+  transition: transform 0.3s ease;
+}
+
+/* Add a hover effect for images (optional) */
+.product-image:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Styling for the loading spinner */
+.loading-spinner {
+  text-align: center; /* Center the spinner */
+  margin: 20px 0; /* Add spacing around the spinner */
+}
+
+/* Styling for other sections (like headers) */
+.categories__header {
+  text-align: center; /* Center the header text */
+  font-size: 1.5em; /* Make the font larger */
+  font-weight: bold; /* Bold the text */
+}
+
+.products__header {
+  text-align: left; /* Align text to the left */
+  font-size: 1.5em;
+  font-weight: bold;
+  padding-left: 10px; /* Add some padding to the left */
+}
+
+/* Styling for the "Show more" button */
+.load-products {
+  text-align: center; /* Center the button */
+  margin: 20px 0; /* Add top and bottom margin */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background: transparent; /* Remove default background */
+  border: none; /* Remove default border */
+  font-size: 60px; /* Adjust icon size */
+  color: #000; /* Dark color for arrows */
+}
+
+.carousel-control-prev-icon::before {
+  content: "\2039"; /* Unicode character for left arrow */
+}
+
+.carousel-control-next-icon::before {
+  content: "\203A"; /* Unicode character for right arrow */
+}
+
+.carousel-indicators .active {
+  background-color: #000; /* Dark color for active indicator */
+}
+
+.carousel-indicators li {
+  background-color: #555; /* Dark color for inactive indicators */
+}
+
+.load-products button {
+  padding: 10px 20px; /* Padding for the button */
+  font-size: 1em; /* Font size for the button text */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #1890ff; /* Default button color (blue) */
+  color: white; /* White text on the button */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Style for ng-select dropdown */
+.ng-dropdown-panel {
+  position: absolute !important;
+  z-index: 1000; /* Ensure dropdown appears on top of other elements */
+  border: 1px solid #ccc; /* Add border for visual separation */
+  max-height: 200px; /* Limit the height of the dropdown */
+  background-color: #fff; /* Set background color */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items {
+  height: 136px !important;
+}
+
+/* Style for ng-select dropdown options */
+.ng-dropdown-panel .ng-option {
+  padding: 0px 6px; /* Add padding for spacing */
+}
+
+/* Style for ng-select dropdown option hover */
+.ng-dropdown-panel .ng-option.ng-option-marked {
+  background-color: #f0f0f0; /* Add background color on hover */
+}
+
+/* Style for ng-select dropdown option selected */
+.ng-dropdown-panel .ng-option.ng-option-selected {
+  color: #fff; /* Change text color for better visibility */
+}
+
+/* Change the paginator's background color */
+::ng-deep .mat-paginator {
+  background-color: rgb(207, 226, 255); /* Set the desired background color */
+  color: rgb(5, 44, 101); /* Set text color to match */
+}
+
+/* Style the paginator navigation buttons (like previous/next arrows) */
+::ng-deep .mat-paginator-navigation {
+  color: rgb(5, 44, 101); /* Set button text/icon color */
+}
+
+/* Customize the page size dropdown text color */
+::ng-deep .mat-paginator-page-size {
+  color: rgb(5, 44, 101); /* Set text color */
+}
+
+/* Style icons used within the paginator */
+::ng-deep .mat-icon {
+  color: rgb(5, 44, 101); /* Set icon color */
 }

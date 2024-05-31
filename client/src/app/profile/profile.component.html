@@ -1,6 +1,7 @@
 <div class="profile-container">
   <div class="form-container">
     <h2>Profile</h2>
+
     <nz-alert
       [nzType]="alertType"
       nzShowIcon
@@ -8,7 +9,9 @@
       [ngStyle]="{ marginBottom: '12px' }"
       *ngIf="alertVisible"
     ></nz-alert>
+    
     <form (ngSubmit)="onSubmit()">
+      <div class="card-body">
       <div class="input-container" *ngFor="let field of user">
         <label for="field.key">{{ field.label }}</label>
         <input
@@ -19,16 +22,14 @@
           [(ngModel)]="field.value"
         />
       </div>
-      <div class="cta-container">
+      <div class="col-12 mx-auto m-2">
         <button
-          nz-button
-          type="submit"
-          [nzLoading]="loading"
-          [disabled]="canUpdate()"
-        >
+          class="btn btn-outline-primary w-100 "
+          type="submit" >
           Update
         </button>
       </div>
+      </div>
     </form>
-  </div>
+    </div>
 </div>

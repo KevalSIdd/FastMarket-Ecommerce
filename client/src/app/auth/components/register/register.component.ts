@@ -1,12 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { ApiService } from '../../../services/api.service';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { FormsModule } from '@angular/forms';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
+  standalone: true,
+  imports: [
+    NzAlertModule,
+    CommonModule,
+    FormsModule,
+    NzInputModule,
+    NzButtonModule,
+    NzWaveModule,
+    RouterLink,
+  ],
 })
 export class RegisterComponent implements OnInit {
   fullName = '';
@@ -15,13 +30,13 @@ export class RegisterComponent implements OnInit {
   confirmPassword = '';
   errorMessage = '';
   loading = false;
+  isPasswordVisible = false;
   constructor(
-    private _api: ApiService,
     private _auth: AuthService,
     private _router: Router
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(): void {
     this.errorMessage = '';
@@ -38,7 +53,7 @@ export class RegisterComponent implements OnInit {
           })
           .subscribe(
             (res) => {
-              console.log(res);
+
               this.loading = false;
               this._router.navigate(['/login']);
             },
@@ -57,5 +72,10 @@ export class RegisterComponent implements OnInit {
     return this.fullName && this.email && this.password && this.confirmPassword
       ? true
       : false;
+  }
+
+
+  togglePasswordVisibility(): void { // Method to toggle password visibility
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }

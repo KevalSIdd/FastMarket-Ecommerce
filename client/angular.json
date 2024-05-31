@@ -26,12 +26,25 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": ["src/favicon.ico", "src/assets", {"glob":"**/*","input":"./node_modules/@ant-design/icons-angular/src/inline-svg/","output":"/assets/"}],
-            "styles": [
-              "src/theme.less",
-              "src/styles.scss"
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
-            "scripts": []
+            "styles": [
+              "node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "src/theme.less",
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+            ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -66,18 +79,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "client:build"
+            "buildTarget": "client:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "client:build:production"
+              "buildTarget": "client:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "client:build"
+            "buildTarget": "client:build"
           }
         },
         "test": {
@@ -87,20 +100,17 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
             ],
-            "exclude": ["**/node_modules/**"]
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "ag-grid-community/styles/ag-grid.css",
+              "ag-grid-community/styles/ag-theme-quartz.css",
+              "src/styles.scss"
+            ],
+            "scripts": []
           }
         },
         "e2e": {
@@ -117,6 +127,5 @@
         }
       }
     }
-  },
-  "defaultProject": "client"
+  }
 }

@@ -1,6 +1,6 @@
 <div class="register-container">
   <div class="form-container">
-    <h2>Sign Up to Eccom</h2>
+    <h2>Sign Up</h2>
     <nz-alert
       *ngIf="errorMessage"
       nzShowIcon
@@ -32,23 +32,55 @@
       <div class="🤪">
         <div class="input-container">
           <label for="password">Password</label>
-          <input
-            nz-input
-            type="password"
-            name="password"
-            [(ngModel)]="password"
-            placeholder="Enter a strong password"
-          />
+          <div class="input-wrapper">
+            <!-- Wrapper for input and icon -->
+            <input
+              nz-input
+              [type]="isPasswordVisible ? 'text' : 'password'"
+              name="password"
+              style="padding: 10px"
+              placeholder="Enter your password"
+              [(ngModel)]="password"
+              autocomplete="current-password"
+            />
+            <button
+              nz-button
+              type="button"
+              nzType="link"
+              (click)="togglePasswordVisibility()"
+              class="toggle-icon"
+              aria-label="Toggle Password Visibility"
+            >
+              <i
+                [class]="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
+              ></i>
+            </button>
+          </div>
         </div>
         <div class="input-container">
           <label for="confirmPassword">Confirm password</label>
-          <input
-            nz-input
-            type="password"
-            name="confirmPassword"
-            [(ngModel)]="confirmPassword"
-            placeholder="Repeat your password"
-          />
+          <div class="input-wrapper">
+            <input
+              nz-input
+              [type]="isPasswordVisible ? 'text' : 'password'"
+              name="confirmPassword"
+              [(ngModel)]="confirmPassword"
+              placeholder="Repeat your password"
+              style="padding: 10px"
+            />
+            <button
+              nz-button
+              type="button"
+              nzType="link"
+              (click)="togglePasswordVisibility()"
+              class="toggle-icon"
+              aria-label="Toggle Password Visibility"
+            >
+              <i
+                [class]="isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
+              ></i>
+            </button>
+          </div>
         </div>
       </div>
       <div class="✅">
@@ -62,7 +94,6 @@
         </div>
       </div>
       <div class="cta-container">
-        <!-- <input type="submit" value="Sign up" /> -->
         <button
           nz-button
           type="submit"
@@ -72,7 +103,11 @@
           Sign up
         </button>
         <div>
-          <div><a routerLink="/login">Sign in with an existing user</a></div>
+          <div>
+            <a routerLink="/login" class="existingacc"
+              >Sign in with an existing user</a
+            >
+          </div>
         </div>
       </div>
     </form>

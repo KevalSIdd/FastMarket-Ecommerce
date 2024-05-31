@@ -1,0 +1,93 @@
+<div class="createpass-container">
+  <div class="form-container">
+    <h2>Create Password</h2>
+    <nz-alert
+      *ngIf="errorMessage"
+      nzShowIcon
+      nzType="error"
+      [nzMessage]="errorMessage"
+      [ngStyle]="{ 'margin-bottom': '16px' }"
+    ></nz-alert>
+    <div class="card">
+      <form (ngSubmit)="onSubmit()">
+        {{ email }}
+        <div class="card-body">
+          <div class="🤪">
+            <div class="input-container">
+              <label for="password">New Password</label>
+              <div class="input-wrapper">
+                <input
+                  nz-input
+                  [type]="isPasswordVisible ? 'text' : 'password'"
+                  name="password"
+                  style="padding: 10px; margin-top: 5px"
+                  [(ngModel)]="password"
+                  autocomplete="new-password"
+                  placeholder="Enter a strong password"
+                />
+                <button
+                  nz-button
+                  type="button"
+                  nzType="link"
+                  (click)="togglePasswordVisibility()"
+                  class="toggle-icon"
+                  aria-label="Toggle Password Visibility"
+                >
+                  <i
+                    [class]="
+                      isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'
+                    "
+                  ></i>
+                </button>
+              </div>
+            </div>
+            <br />
+            <div class="input-container">
+              <label for="confirmPassword">Confirm password</label>
+              <div class="input-wrapper">
+                <input
+                  nz-input
+                  [type]="isPasswordVisible ? 'text' : 'password'"
+                  name="confirmPassword"
+                  style="padding: 10px; margin-top: 5px"
+                  [(ngModel)]="confirmPassword"
+                  autocomplete="new-password"
+                  placeholder="Repeat your password"
+                />
+                <button
+                  nz-button
+                  type="button"
+                  nzType="link"
+                  (click)="togglePasswordVisibility()"
+                  class="toggle-icon"
+                  aria-label="Toggle Password Visibility"
+                >
+                  <i
+                    [class]="
+                      isPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'
+                    "
+                  ></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-container">
+            <button
+              nz-button
+              type="submit"
+              class="resetpass"
+              [nzLoading]="loading"
+            >
+              Reset Password
+            </button>
+          </div>
+
+          <div class="acc-link">
+            Go Back To<a routerLink="/login" class="forlogin"> Login</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

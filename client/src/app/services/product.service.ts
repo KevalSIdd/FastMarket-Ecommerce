@@ -11,9 +11,9 @@ import { ApiService } from './api.service';
 export class ProductService {
   private url = environment.apiUrl;
 
-  constructor(private http: HttpClient, private _api: ApiService) {}
+  constructor(private http: HttpClient, private _api: ApiService) { }
 
-  getAllProducts(limitOfResults = 9, page): Observable<Products> {
+  getAllProducts(limitOfResults = 9, page: any): Observable<Products> {
     return this.http.get<Products>(this.url + 'products', {
       params: {
         limit: limitOfResults.toString(),
@@ -22,8 +22,16 @@ export class ProductService {
     });
   }
 
-  getSingleProduct(id: Number): Observable<any> {
-    console.log(id);
-    return this._api.getTypeRequest('products/' + id);
+  getSingleProduct(payload: any): Observable<any> {
+    let apiUrl = `products/${payload.id}`;
+    if (payload.userId) {
+      apiUrl += `?userId=${payload.userId}`;
+    }
+    return this._api.getTypeRequest(apiUrl);
+
+    // return this._api.getTypeRequest(`products/${payload.id}?userId=${payload.userId}`);
   }
+
 }
+
+

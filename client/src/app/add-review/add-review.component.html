@@ -1,0 +1,34 @@
+<div class="add-review-form">
+  <h2>Add a Review</h2>
+  <div class="card">
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group mb-2">
+          <label for="description">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            rows="3"
+            [(ngModel)]="review.description"
+            name="description"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group mb-2">
+          <label for="rating">Rating :</label>
+          <span>
+            <ngb-rating
+              style="font-size: large"
+              [(rate)]="review.rating"
+              max="5"
+              (hover)="(0)"
+              [readonly]="false"
+            ></ngb-rating>
+          </span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
+    </div>
+  </div>
+</div>

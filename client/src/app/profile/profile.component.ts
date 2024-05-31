@@ -2,11 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { TokenStorageService } from '../services/token-storage.service';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { FormsModule } from '@angular/forms';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NgIf, NgStyle, NgFor } from '@angular/common';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        NzAlertModule,
+        NgStyle,
+        FormsModule,
+        NgFor,
+        NzInputModule,
+    ],
 })
 export class ProfileComponent implements OnInit {
   user = [
@@ -53,7 +66,6 @@ export class ProfileComponent implements OnInit {
     this.userId = id;
     this.user[0].value = fname;
     this.user[1].value = email;
-    console.log(this.user);
   }
 
   canUpdate(): boolean {
@@ -79,7 +91,6 @@ export class ProfileComponent implements OnInit {
         })
         .subscribe(
           (res: any) => {
-            console.log(res);
             this.alertMessage = res.message;
             this.alertType = 'success';
             this.alertVisible = true;
@@ -95,7 +106,6 @@ export class ProfileComponent implements OnInit {
             // window.location.reload();
           },
           (err: any) => {
-            console.log(err);
             this.alertMessage = err.error.message;
             this.alertVisible = true;
             this.alertType = 'error';

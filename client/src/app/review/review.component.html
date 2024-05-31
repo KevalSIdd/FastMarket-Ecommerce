@@ -1,0 +1,29 @@
+<div class="row">
+  @for (item of reviewdata; track $index) {
+  <div class="col-12 mb-2">
+    <span
+      ><img src="../../assets/user.jpg" style="width: 30px" alt="icon"
+    /></span>
+    <span class="ms-2 text-muted">{{ item?.username }}</span>
+  </div>
+
+  <div class="col-12">
+    <div class="rating">
+      <span>
+        <ngb-rating
+          class="mb-2"
+          [max]="5"
+          [rate]="item.rating"
+          [readonly]="true"
+        ></ngb-rating>
+      </span>
+    </div>
+  </div>
+  <div class="col-12 mb-2">
+    <p class="fw-medium mb-0">{{ item?.description }}</p>
+    <span class="mb-1 fw-light">
+      Reviewed on&nbsp;{{ item?.AddedDate | date : "MMM d, y" }}</span
+    >
+  </div>
+  }
+</div>
